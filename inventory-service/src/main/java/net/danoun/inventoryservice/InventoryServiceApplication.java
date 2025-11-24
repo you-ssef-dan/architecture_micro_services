@@ -36,7 +36,7 @@ public class InventoryServiceApplication {
             productRepository.save(
                     Product.builder()
                             .id(UUID.randomUUID().toString())
-                            .name("laptop")
+                            .name("play station")
                             .price(560.0)
                             .quantity(20)
                             .build());

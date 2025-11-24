@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class BillRestController {
     @Autowired
@@ -31,6 +33,22 @@ public class BillRestController {
         });
 
         return bill;
+    }
+
+    @GetMapping("/bills/customer/{customerId}")
+    public List<Bill> getBillsByCustomer(@PathVariable Long customerId){
+        List<Bill> bills = billRepository.findByCustomerId(customerId);
+        bills.forEach(bill -> {
+            bill.setCustomer(customerRestClient.getCustomerById(customerId));
+
+            bill.getProductItems().forEach(productItem -> {
+                productItem.setProduct(
+                        productRestClient.getProductById(productItem.getProductId())
+                );
+            });
+        });
+        return bills;
+
     }
 
 }
